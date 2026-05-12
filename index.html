@@ -313,14 +313,15 @@
       }
     };
 
-    const handleClick = (r,c) => {
-      if(invertClicks) doFlag(r,c);
-      else if(revealed[r][c]) doChord(r,c);
+const handleClick = (r,c) => {
+      if(revealed[r][c]) doChord(r,c);
+      else if(invertClicks) doFlag(r,c);
       else doReveal(r,c);
     };
     const handleRight = (e,r,c) => {
       e.preventDefault();
-      if(invertClicks) { if(revealed[r][c]) doChord(r,c); else doReveal(r,c); }
+      if(revealed[r][c]) doChord(r,c);
+      else if(invertClicks) doReveal(r,c);
       else doFlag(r,c);
     };
 
