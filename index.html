@@ -272,8 +272,57 @@
       setMarks(nm);
     };
 
-    const handleClick = (r,c) => { if(invertClicks) doFlag(r,c); else doReveal(r,c); };
-    const handleRight = (e,r,c) => { e.preventDefault(); if(invertClicks) doReveal(r,c); else doFlag(r,c); };
+   const doChord = (r, c) => {
+      if (!revealed[r][c] || grid[r][c] <= 0) return;
+      let adjFlags=0;
+      for(let dr=-1;dr<=1;dr++) for(let dc=-1;dc<=1;dc++){
+        const nr=r+dr,nc=c+dc;
+        if(nr>=0&&nr<cfg.rows&&nc>=0&&nc<cfg.cols&&marks[nr][nc]===1) adjFlags++;
+      }
+      if (adjFlags !== grid[r][c]) return;
+      const newRevealed = revealed.map(row=>[...row]);
+      let hitMine=false, hitR, hitC;
+      for(let dr=-1;dr<=1;dr++) for(let dc=-1;dc<=1;dc++){
+        const nr=r+dr,nc=c+dc;
+        if(nr<0||nr>=cfg.rows||nc<0||nc>=cfg.cols) continue;
+        if(!newRevealed[nr][nc]&&marks[nr][nc]!==1){
+          if(grid[nr][nc]===-1){ hitMine=true; hitR=nr; hitC=nc; newRevealed[nr][nc]=true; }
+          else floodReveal(grid, newRevealed, nr, nc, cfg.rows, cfg.cols);
+        }
+      }
+      if(hitMine){
+        for(let rr=0;rr<cfg.rows;rr++)
+          for(let cc=0;cc<cfg.cols;cc++)
+            if(grid[rr][cc]===-1) newRevealed[rr][cc]=true;
+        setRevealed(newRevealed); setHitCell([hitR,hitC]); setGameOver(true); stopTimer();
+        return;
+      }
+      setRevealed(newRevealed);
+      let hidden=0;
+      for(let rr=0;rr<cfg.rows;rr++)
+        for(let cc=0;cc<cfg.cols;cc++)
+          if(!newRevealed[rr][cc]) hidden++;
+      if(hidden===cfg.mines){
+        setWon(true); stopTimer();
+        setSeconds(s=>{
+          const nb={...best};
+          const isRecord=!nb[diff]||s<nb[diff];
+          if(isRecord){nb[diff]=s;setBest(nb);saveBest(nb);setNewRecord(true);}
+          return s;
+        });
+      }
+    };
+
+    const handleClick = (r,c) => {
+      if(invertClicks) doFlag(r,c);
+      else if(revealed[r][c]) doChord(r,c);
+      else doReveal(r,c);
+    };
+    const handleRight = (e,r,c) => {
+      e.preventDefault();
+      if(invertClicks) { if(revealed[r][c]) doChord(r,c); else doReveal(r,c); }
+      else doFlag(r,c);
+    };
 
     const flagCount = marks ? marks.flat().filter(v=>v===1).length : 0;
     const remaining = cfg.mines - flagCount;
