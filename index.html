@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Démineur</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0f13;
+      --surface: #1a1a22;
+      --surface2: #22222e;
+      --border: #2e2e3e;
+      --accent: #7c6dfa;
+      --accent2: #fa6d9a;
+      --text: #e8e8f0;
+      --text-muted: #8888a0;
+      --cell-hidden: #252535;
+      --cell-hover: #2e2e42;
+      --cell-revealed: #181820;
+      --cell-flag: #2a2040;
+      --mine-hit: #4a1020;
+      --radius: 6px;
+      --n1: #6db8fa; --n2: #6dfaa0; --n3: #fa6d6d;
+      --n4: #a06dfa; --n5: #fa9a6d; --n6: #6dfaf0;
+      --n7: #fa6de0; --n8: #a0a0b8;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    #root { width: 100%; max-width: 900px; }
+
+    .app-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .app-title span { color: var(--accent); }
+
+    .subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .stats {
+      display: flex;
+      gap: 8px;
+    }
+
+    .stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 8px 16px;
+      text-align: center;
+      min-width: 72px;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-family: 'Space Mono', monospace;
+      margin-bottom: 4px;
+    }
+
+    .stat-val {
+      font-size: 22px;
+      font-weight: 700;
+      font-family: 'Space Mono', monospace;
+      color: var(--accent);
+    }
+
+    .controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    select {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-size: 13px;
+      padding: 7px 12px;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      outline: none;
+    }
+
+    select:focus { border-color: var(--accent); }
+
+    button {
+      background: var(--accent);
+      border: none;
+      border-radius: var(--radius);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 7px 16px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: opacity 0.15s;
+    }
+
+    button:hover { opacity: 0.85; }
+    button:active { opacity: 0.7; }
+
+    .board-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      overflow-x: auto;
+    }
+
+    .board {
+      display: inline-grid;
+      gap: 3px;
+    }
+
+    .cell {
+      width: 30px;
+      height: 30px;
+      border-radius: 4px;
+      background: var(--cell-hidden);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: 'Space Mono', monospace;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.1s, transform 0.08s;
+    }
+
+    .cell:hover:not(.revealed):not(.game-over-cell) {
+      background: var(--cell-hover);
+      transform: scale(1.08);
+    }
+
+    .cell.revealed {
+      background: var(--cell-revealed);
+      border-color: #1e1e28;
+      cursor: default;
+    }
+
+    .cell.flagged { background: var(--cell-flag); border-color: var(--accent2); }
+
+    .cell.mine-hit { background: var(--mine-hit); border-color: #fa6d6d; }
+
+    .cell.n1 { color: var(--n1); }
+    .cell.n2 { color: var(--n2); }
+    .cell.n3 { color: var(--n3); }
+    .cell.n4 { color: var(--n4); }
+    .cell.n5 { color: var(--n5); }
+    .cell.n6 { color: var(--n6); }
+    .cell.n7 { color: var(--n7); }
+    .cell.n8 { color: var(--n8); }
+
+    .banner {
+      margin-top: 1rem;
+      padding: 12px 18px;
+      border-radius: var(--radius);
+      font-size: 15px;
+      font-weight: 600;
+      font-family: 'Space Mono', monospace;
+      border: 1px solid;
+    }
+
+    .banner.win  { background: #0f2a1a; border-color: #2a6d40; color: #6dfaa0; }
+    .banner.lose { background: #2a0f18; border-color: #6d2a30; color: #fa8080; }
+
+    .hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 10px;
+      font-family: 'Space Mono', monospace;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef, useCallback } = React;
+
+    const CONFIGS = {
+      easy:   { rows: 9,  cols: 9,  mines: 10,  label: 'Facile (9×9)' },
+      medium: { rows: 16, cols: 16, mines: 40,  label: 'Moyen (16×16)' },
+      hard:   { rows: 16, cols: 30, mines: 99,  label: 'Difficile (30×16)' },
+    };
+
+    function makeEmpty(rows, cols, val = false) {
+      return Array.from({ length: rows }, () => Array(cols).fill(val));
+    }
+
+    function placeMines(rows, cols, totalMines, safeR, safeC) {
+      const grid = makeEmpty(rows, cols, 0);
+      let placed = 0;
+      while (placed < totalMines) {
+        const r = Math.floor(Math.random() * rows);
+        const c = Math.floor(Math.random() * cols);
+        if (grid[r][c] !== -1 && !(Math.abs(r - safeR) <= 1 && Math.abs(c - safeC) <= 1)) {
+          grid[r][c] = -1;
+          placed++;
+        }
+      }
+      for (let r = 0; r < rows; r++)
+        for (let c = 0; c < cols; c++)
+          if (grid[r][c] !== -1) {
+            let n = 0;
+            for (let dr = -1; dr <= 1; dr++)
+              for (let dc = -1; dc <= 1; dc++) {
+                const nr = r + dr, nc = c + dc;
+                if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && grid[nr][nc] === -1) n++;
+              }
+            grid[r][c] = n;
+          }
+      return grid;
+    }
+
+    function floodReveal(grid, revealed, r, c, rows, cols) {
+      const stack = [[r, c]];
+      while (stack.length) {
+        const [cr, cc] = stack.pop();
+        if (cr < 0 || cr >= rows || cc < 0 || cc >= cols || revealed[cr][cc]) continue;
+        revealed[cr][cc] = true;
+        if (grid[cr][cc] === 0)
+          for (let dr = -1; dr <= 1; dr++)
+            for (let dc = -1; dc <= 1; dc++)
+              stack.push([cr + dr, cc + dc]);
+      }
+    }
+
+    function App() {
+      const [diff, setDiff] = useState('medium');
+      const [grid, setGrid] = useState(null);
+      const [revealed, setRevealed] = useState(null);
+      const [flagged, setFlagged] = useState(null);
+      const [gameOver, setGameOver] = useState(false);
+      const [won, setWon] = useState(false);
+      const [firstClick, setFirstClick] = useState(true);
+      const [seconds, setSeconds] = useState(0);
+      const [hitCell, setHitCell] = useState(null);
+      const timerRef = useRef(null);
+      const cfg = CONFIGS[diff];
+
+      const initGame = useCallback((d = diff) => {
+        const c = CONFIGS[d];
+        clearInterval(timerRef.current);
+        setGrid(makeEmpty(c.rows, c.cols, 0));
+        setRevealed(makeEmpty(c.rows, c.cols, false));
+        setFlagged(makeEmpty(c.rows, c.cols, false));
+        setGameOver(false);
+        setWon(false);
+        setFirstClick(true);
+        setSeconds(0);
+        setHitCell(null);
+      }, [diff]);
+
+      useEffect(() => { initGame(diff); }, [diff]);
+
+      const startTimer = () => {
+        clearInterval(timerRef.current);
+        timerRef.current = setInterval(() => setSeconds(s => s + 1), 1000);
+      };
+
+      const stopTimer = () => clearInterval(timerRef.current);
+
+      const handleClick = (r, c) => {
+        if (gameOver || won || revealed[r][c] || flagged[r][c]) return;
+
+        let g = grid;
+        let isFirst = firstClick;
+
+        if (isFirst) {
+          g = placeMines(cfg.rows, cfg.cols, cfg.mines, r, c);
+          setGrid(g);
+          setFirstClick(false);
+          startTimer();
+        }
+
+        const newRevealed = revealed.map(row => [...row]);
+
+        if (g[r][c] === -1) {
+          // hit a mine
+          for (let rr = 0; rr < cfg.rows; rr++)
+            for (let cc = 0; cc < cfg.cols; cc++)
+              if (g[rr][cc] === -1) newRevealed[rr][cc] = true;
+          newRevealed[r][c] = true;
+          setRevealed(newRevealed);
+          setHitCell([r, c]);
+          setGameOver(true);
+          stopTimer();
+          return;
+        }
+
+        floodReveal(g, newRevealed, r, c, cfg.rows, cfg.cols);
+        setRevealed(newRevealed);
+
+        // check win
+        let hidden = 0;
+        for (let rr = 0; rr < cfg.rows; rr++)
+          for (let cc = 0; cc < cfg.cols; cc++)
+            if (!newRevealed[rr][cc]) hidden++;
+        if (hidden === cfg.mines) {
+          setWon(true);
+          stopTimer();
+        }
+      };
+
+      const handleRight = (e, r, c) => {
+        e.preventDefault();
+        if (gameOver || won || revealed[r][c]) return;
+        const nf = flagged.map(row => [...row]);
+        nf[r][c] = !nf[r][c];
+        setFlagged(nf);
+      };
+
+      const flagCount = flagged ? flagged.flat().filter(Boolean).length : 0;
+      const remaining = cfg.mines - flagCount;
+
+      return (
+        <div>
+          <div className="app-title">Démi<span>neur</span></div>
+          <div className="subtitle">// clic droit pour poser un drapeau</div>
+
+          <div className="top-bar">
+            <div className="stats">
+              <div className="stat">
+                <div className="stat-label">Mines</div>
+                <div className="stat-val">{remaining}</div>
+              </div>
+              <div className="stat">
+                <div className="stat-label">Drapeaux</div>
+                <div className="stat-val">{flagCount}</div>
+              </div>
+              <div className="stat">
+                <div className="stat-label">Temps</div>
+                <div className="stat-val">{seconds}s</div>
+              </div>
+            </div>
+            <div className="controls">
+              <select value={diff} onChange={e => setDiff(e.target.value)}>
+                {Object.entries(CONFIGS).map(([k, v]) => (
+                  <option key={k} value={k}>{v.label}</option>
+                ))}
+              </select>
+              <button onClick={() => initGame(diff)}>Nouvelle partie</button>
+            </div>
+          </div>
+
+          <div className="board-wrap">
+            <div className="board" style={{ gridTemplateColumns: `repeat(${cfg.cols}, 30px)` }}>
+              {grid && Array.from({ length: cfg.rows }, (_, r) =>
+                Array.from({ length: cfg.cols }, (_, c) => {
+                  const isRevealed = revealed[r][c];
+                  const isFlagged = flagged[r][c];
+                  const val = grid[r][c];
+                  const isHit = hitCell && hitCell[0] === r && hitCell[1] === c;
+
+                  let cls = 'cell';
+                  let content = '';
+
+                  if (isRevealed) {
+                    cls += ' revealed';
+                    if (val === -1) {
+                      cls += isHit ? ' mine-hit' : '';
+                      content = '💣';
+                    } else if (val > 0) {
+                      cls += ` n${val}`;
+                      content = val;
+                    }
+                  } else if (isFlagged) {
+                    cls += ' flagged';
+                    content = '🚩';
+                  }
+
+                  return (
+                    <div
+                      key={`${r}-${c}`}
+                      className={cls}
+                      onClick={() => handleClick(r, c)}
+                      onContextMenu={e => handleRight(e, r, c)}
+                    >
+                      {content}
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          </div>
+
+          {won && (
+            <div className="banner win">🎉 Gagné en {seconds}s ! Bien joué.</div>
+          )}
+          {gameOver && !won && (
+            <div className="banner lose">💥 Boom ! Nouvelle partie ?</div>
+          )}
+          <div className="hint">clic gauche = révéler &nbsp;|&nbsp; clic droit = 🚩 drapeau</div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
