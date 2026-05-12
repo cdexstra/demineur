@@ -11,26 +11,6 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --bg: #0f0f13;
-      --surface: #1a1a22;
-      --surface2: #22222e;
-      --border: #2e2e3e;
-      --accent: #7c6dfa;
-      --accent2: #fa6d9a;
-      --text: #e8e8f0;
-      --text-muted: #8888a0;
-      --cell-hidden: #252535;
-      --cell-hover: #2e2e42;
-      --cell-revealed: #181820;
-      --cell-flag: #2a2040;
-      --mine-hit: #4a1020;
-      --radius: 6px;
-      --n1: #6db8fa; --n2: #6dfaa0; --n3: #fa6d6d;
-      --n4: #a06dfa; --n5: #fa9a6d; --n6: #6dfaf0;
-      --n7: #fa6de0; --n8: #a0a0b8;
-    }
-
     body {
       background: var(--bg);
       color: var(--text);
@@ -40,403 +20,344 @@
       align-items: flex-start;
       justify-content: center;
       padding: 2rem 1rem;
+      transition: background 0.3s, color 0.3s;
     }
 
-    #root { width: 100%; max-width: 900px; }
-
-    .app-title {
-      font-family: 'Space Mono', monospace;
-      font-size: 28px;
-      font-weight: 700;
-      letter-spacing: -1px;
-      color: var(--text);
-      margin-bottom: 4px;
+    body.theme-dark {
+      --bg:#0f0f13;--surface:#1a1a22;--border:#2e2e3e;
+      --accent:#7c6dfa;--accent2:#fa6d9a;
+      --text:#e8e8f0;--text-muted:#8888a0;
+      --cell-hidden:#252535;--cell-hover:#2e2e42;
+      --cell-revealed:#181820;--cell-flag:#2a2040;
+      --mine-hit:#4a1020;--mine-hit-border:#fa6d6d;
+      --n1:#6db8fa;--n2:#6dfaa0;--n3:#fa6d6d;--n4:#a06dfa;--n5:#fa9a6d;--n6:#6dfaf0;--n7:#fa6de0;--n8:#a0a0b8;
+      --bwin-bg:#0f2a1a;--bwin-b:#2a6d40;--bwin-t:#6dfaa0;
+      --blose-bg:#2a0f18;--blose-b:#6d2a30;--blose-t:#fa8080;
+    }
+    body.theme-light {
+      --bg:#f0ede8;--surface:#ffffff;--border:#d0cdc8;
+      --accent:#5c4de0;--accent2:#e0386a;
+      --text:#1a1820;--text-muted:#706e80;
+      --cell-hidden:#dedad4;--cell-hover:#ccc8c2;
+      --cell-revealed:#ece9e4;--cell-flag:#ede0f0;
+      --mine-hit:#ffd0d0;--mine-hit-border:#e04040;
+      --n1:#1855b0;--n2:#1a7a40;--n3:#c02020;--n4:#5020a0;--n5:#a04010;--n6:#107070;--n7:#901060;--n8:#505060;
+      --bwin-bg:#d8f0e0;--bwin-b:#40a060;--bwin-t:#1a6030;
+      --blose-bg:#fde0e0;--blose-b:#e08080;--blose-t:#901010;
+    }
+    body.theme-forest {
+      --bg:#0d1a10;--surface:#162018;--border:#2a4030;
+      --accent:#4caf70;--accent2:#ffd060;
+      --text:#d8f0d8;--text-muted:#7aaa80;
+      --cell-hidden:#1e3020;--cell-hover:#2a4028;
+      --cell-revealed:#111a12;--cell-flag:#2a3a10;
+      --mine-hit:#4a1010;--mine-hit-border:#ff6060;
+      --n1:#80d0ff;--n2:#a0ff80;--n3:#ff8080;--n4:#c080ff;--n5:#ffb060;--n6:#60ffee;--n7:#ff80d0;--n8:#a0b0a0;
+      --bwin-bg:#0d2a18;--bwin-b:#2a7040;--bwin-t:#80ffb0;
+      --blose-bg:#2a0d10;--blose-b:#7a3030;--blose-t:#ff9090;
+    }
+    body.theme-retro {
+      --bg:#1a1000;--surface:#2a1e00;--border:#5a4010;
+      --accent:#f0a000;--accent2:#f06000;
+      --text:#ffe080;--text-muted:#a08040;
+      --cell-hidden:#3a2a00;--cell-hover:#4a3800;
+      --cell-revealed:#150e00;--cell-flag:#3a1800;
+      --mine-hit:#5a0000;--mine-hit-border:#ff4000;
+      --n1:#60d0ff;--n2:#60ff80;--n3:#ff6060;--n4:#d060ff;--n5:#ff9040;--n6:#60ffee;--n7:#ff60d0;--n8:#b0a060;
+      --bwin-bg:#0a2000;--bwin-b:#406020;--bwin-t:#80ff40;
+      --blose-bg:#3a0000;--blose-b:#802020;--blose-t:#ff8080;
+    }
+    body.theme-ice {
+      --bg:#e8f4ff;--surface:#ffffff;--border:#b8d8f0;
+      --accent:#2080d0;--accent2:#8040e0;
+      --text:#102040;--text-muted:#6090b0;
+      --cell-hidden:#c8e4f8;--cell-hover:#b0d4f0;
+      --cell-revealed:#ddeeff;--cell-flag:#d8c8f8;
+      --mine-hit:#ffd0d8;--mine-hit-border:#e04060;
+      --n1:#1060b0;--n2:#107040;--n3:#c02030;--n4:#6020b0;--n5:#b04010;--n6:#106080;--n7:#901070;--n8:#507090;
+      --bwin-bg:#d0f0e0;--bwin-b:#40a070;--bwin-t:#106040;
+      --blose-bg:#fde0e4;--blose-b:#e08090;--blose-t:#900030;
     }
 
-    .app-title span { color: var(--accent); }
+    #root { width: 100%; max-width: 960px; }
 
-    .subtitle {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: 1.5rem;
-      font-family: 'Space Mono', monospace;
-    }
+    .app-title { font-family:'Space Mono',monospace; font-size:28px; font-weight:700; letter-spacing:-1px; color:var(--text); margin-bottom:4px; }
+    .app-title span { color:var(--accent); }
+    .subtitle { font-size:13px; color:var(--text-muted); margin-bottom:1.25rem; font-family:'Space Mono',monospace; }
 
-    .top-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1.25rem;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
+    .top-bar { display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; flex-wrap:wrap; gap:10px; }
+    .stats { display:flex; gap:8px; }
+    .stat { background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:8px 14px; text-align:center; min-width:68px; }
+    .stat-label { font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; font-family:'Space Mono',monospace; margin-bottom:2px; }
+    .stat-val { font-size:20px; font-weight:700; font-family:'Space Mono',monospace; color:var(--accent); }
+    .controls { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
 
-    .stats {
-      display: flex;
-      gap: 8px;
-    }
+    select { background:var(--surface); border:1px solid var(--border); border-radius:6px; color:var(--text); font-size:13px; padding:7px 10px; font-family:'Inter',sans-serif; cursor:pointer; outline:none; }
+    select:focus { border-color:var(--accent); }
 
-    .stat {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 8px 16px;
-      text-align: center;
-      min-width: 72px;
-    }
+    button { background:var(--accent); border:none; border-radius:6px; color:#fff; font-size:13px; font-weight:600; padding:7px 14px; cursor:pointer; font-family:'Inter',sans-serif; transition:opacity 0.15s; }
+    button:hover { opacity:0.85; }
+    button:active { opacity:0.7; }
 
-    .stat-label {
-      font-size: 10px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      font-family: 'Space Mono', monospace;
-      margin-bottom: 4px;
-    }
+    .settings-row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:1rem; padding:10px 14px; background:var(--surface); border:1px solid var(--border); border-radius:8px; }
+    .settings-label { font-size:12px; color:var(--text-muted); font-family:'Space Mono',monospace; margin-right:2px; white-space:nowrap; }
 
-    .stat-val {
-      font-size: 22px;
-      font-weight: 700;
-      font-family: 'Space Mono', monospace;
-      color: var(--accent);
-    }
+    .theme-btn { padding:5px 12px; font-size:12px; border-radius:20px; border:1px solid var(--border); background:var(--cell-hidden); color:var(--text); cursor:pointer; font-family:'Inter',sans-serif; transition:all 0.15s; }
+    .theme-btn.active { border-color:var(--accent); color:var(--accent); background:var(--cell-flag); }
 
-    .controls {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
+    .toggle-group { display:flex; align-items:center; gap:6px; margin-left:auto; flex-wrap:wrap; }
+    .toggle-label { font-size:12px; color:var(--text-muted); font-family:'Space Mono',monospace; white-space:nowrap; }
+    .toggle { width:36px; height:20px; border-radius:10px; background:var(--border); position:relative; cursor:pointer; border:none; transition:background 0.2s; flex-shrink:0; padding:0; }
+    .toggle.on { background:var(--accent); }
+    .toggle::after { content:''; position:absolute; width:14px; height:14px; border-radius:50%; background:#fff; top:3px; left:3px; transition:left 0.2s; }
+    .toggle.on::after { left:19px; }
 
-    select {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      color: var(--text);
-      font-size: 13px;
-      padding: 7px 12px;
-      font-family: 'Inter', sans-serif;
-      cursor: pointer;
-      outline: none;
-    }
+    .board-wrap { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px; overflow-x:auto; }
+    .board { display:inline-grid; gap:3px; }
 
-    select:focus { border-color: var(--accent); }
+    .cell { width:30px; height:30px; border-radius:4px; background:var(--cell-hidden); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; font-family:'Space Mono',monospace; cursor:pointer; user-select:none; transition:background 0.1s,transform 0.08s; }
+    .cell:hover:not(.revealed) { background:var(--cell-hover); transform:scale(1.08); }
+    .cell.revealed { background:var(--cell-revealed); border-color:var(--cell-revealed); cursor:default; }
+    .cell.flagged { background:var(--cell-flag); border-color:var(--accent2); }
+    .cell.questioned { background:var(--cell-flag); border-color:var(--accent); color:var(--accent); font-size:15px; }
+    .cell.mine-hit { background:var(--mine-hit); border-color:var(--mine-hit-border); }
+    .cell.n1{color:var(--n1)}.cell.n2{color:var(--n2)}.cell.n3{color:var(--n3)}.cell.n4{color:var(--n4)}.cell.n5{color:var(--n5)}.cell.n6{color:var(--n6)}.cell.n7{color:var(--n7)}.cell.n8{color:var(--n8)}
 
-    button {
-      background: var(--accent);
-      border: none;
-      border-radius: var(--radius);
-      color: #fff;
-      font-size: 13px;
-      font-weight: 600;
-      padding: 7px 16px;
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      transition: opacity 0.15s;
-    }
+    .banner { margin-top:1rem; padding:12px 18px; border-radius:6px; font-size:14px; font-weight:600; font-family:'Space Mono',monospace; border:1px solid; }
+    .banner.win  { background:var(--bwin-bg);  border-color:var(--bwin-b);  color:var(--bwin-t); }
+    .banner.lose { background:var(--blose-bg); border-color:var(--blose-b); color:var(--blose-t); }
 
-    button:hover { opacity: 0.85; }
-    button:active { opacity: 0.7; }
-
-    .board-wrap {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 16px;
-      overflow-x: auto;
-    }
-
-    .board {
-      display: inline-grid;
-      gap: 3px;
-    }
-
-    .cell {
-      width: 30px;
-      height: 30px;
-      border-radius: 4px;
-      background: var(--cell-hidden);
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-      font-weight: 700;
-      font-family: 'Space Mono', monospace;
-      cursor: pointer;
-      user-select: none;
-      transition: background 0.1s, transform 0.08s;
-    }
-
-    .cell:hover:not(.revealed):not(.game-over-cell) {
-      background: var(--cell-hover);
-      transform: scale(1.08);
-    }
-
-    .cell.revealed {
-      background: var(--cell-revealed);
-      border-color: #1e1e28;
-      cursor: default;
-    }
-
-    .cell.flagged { background: var(--cell-flag); border-color: var(--accent2); }
-
-    .cell.mine-hit { background: var(--mine-hit); border-color: #fa6d6d; }
-
-    .cell.n1 { color: var(--n1); }
-    .cell.n2 { color: var(--n2); }
-    .cell.n3 { color: var(--n3); }
-    .cell.n4 { color: var(--n4); }
-    .cell.n5 { color: var(--n5); }
-    .cell.n6 { color: var(--n6); }
-    .cell.n7 { color: var(--n7); }
-    .cell.n8 { color: var(--n8); }
-
-    .banner {
-      margin-top: 1rem;
-      padding: 12px 18px;
-      border-radius: var(--radius);
-      font-size: 15px;
-      font-weight: 600;
-      font-family: 'Space Mono', monospace;
-      border: 1px solid;
-    }
-
-    .banner.win  { background: #0f2a1a; border-color: #2a6d40; color: #6dfaa0; }
-    .banner.lose { background: #2a0f18; border-color: #6d2a30; color: #fa8080; }
-
-    .hint {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 10px;
-      font-family: 'Space Mono', monospace;
-    }
+    .bottom-bar { display:flex; justify-content:space-between; align-items:flex-start; margin-top:10px; gap:12px; flex-wrap:wrap; }
+    .hint { font-size:12px; color:var(--text-muted); font-family:'Space Mono',monospace; line-height:1.8; }
+    .best-times { font-size:12px; color:var(--text-muted); font-family:'Space Mono',monospace; text-align:right; line-height:1.8; }
+    .best-times span { color:var(--accent); font-weight:700; }
   </style>
 </head>
-<body>
-  <div id="root"></div>
+<body class="theme-dark">
+<div id="root"></div>
 
-  <script type="text/babel">
-    const { useState, useEffect, useRef, useCallback } = React;
+<script type="text/babel">
+  const { useState, useEffect, useRef, useCallback } = React;
 
-    const CONFIGS = {
-      easy:   { rows: 9,  cols: 9,  mines: 10,  label: 'Facile (9×9)' },
-      medium: { rows: 16, cols: 16, mines: 40,  label: 'Moyen (16×16)' },
-      hard:   { rows: 16, cols: 30, mines: 99,  label: 'Difficile (30×16)' },
+  const CONFIGS = {
+    easy:   { rows:9,  cols:9,  mines:10, label:'Facile (9×9)' },
+    medium: { rows:16, cols:16, mines:40, label:'Moyen (16×16)' },
+    hard:   { rows:16, cols:30, mines:99, label:'Difficile (30×16)' },
+  };
+
+  const THEMES = [
+    { id:'theme-dark',   label:'🌑 Dark' },
+    { id:'theme-light',  label:'☀️ Light' },
+    { id:'theme-forest', label:'🌲 Forêt' },
+    { id:'theme-retro',  label:'🕹️ Retro' },
+    { id:'theme-ice',    label:'🧊 Ice' },
+  ];
+
+  function makeEmpty(rows, cols, val=false) {
+    return Array.from({length:rows}, ()=>Array(cols).fill(val));
+  }
+
+  function placeMines(rows, cols, totalMines, safeR, safeC) {
+    const grid = makeEmpty(rows, cols, 0);
+    let placed=0;
+    while (placed<totalMines) {
+      const r=Math.floor(Math.random()*rows);
+      const c=Math.floor(Math.random()*cols);
+      if (grid[r][c]!==-1 && !(Math.abs(r-safeR)<=1 && Math.abs(c-safeC)<=1)) { grid[r][c]=-1; placed++; }
+    }
+    for (let r=0;r<rows;r++)
+      for (let c=0;c<cols;c++)
+        if (grid[r][c]!==-1) {
+          let n=0;
+          for(let dr=-1;dr<=1;dr++) for(let dc=-1;dc<=1;dc++){
+            const nr=r+dr,nc=c+dc;
+            if(nr>=0&&nr<rows&&nc>=0&&nc<cols&&grid[nr][nc]===-1) n++;
+          }
+          grid[r][c]=n;
+        }
+    return grid;
+  }
+
+  function floodReveal(grid, revealed, r, c, rows, cols) {
+    const stack=[[r,c]];
+    while(stack.length){
+      const [cr,cc]=stack.pop();
+      if(cr<0||cr>=rows||cc<0||cc>=cols||revealed[cr][cc]) continue;
+      revealed[cr][cc]=true;
+      if(grid[cr][cc]===0)
+        for(let dr=-1;dr<=1;dr++) for(let dc=-1;dc<=1;dc++) stack.push([cr+dr,cc+dc]);
+    }
+  }
+
+  function loadBest() { try { return JSON.parse(localStorage.getItem('dm_best')||'{}'); } catch { return {}; } }
+  function saveBest(b) { try { localStorage.setItem('dm_best', JSON.stringify(b)); } catch {} }
+
+  function App() {
+    const [diff, setDiff] = useState('medium');
+    const [grid, setGrid] = useState(null);
+    const [revealed, setRevealed] = useState(null);
+    const [marks, setMarks] = useState(null);
+    const [gameOver, setGameOver] = useState(false);
+    const [won, setWon] = useState(false);
+    const [firstClick, setFirstClick] = useState(true);
+    const [seconds, setSeconds] = useState(0);
+    const [hitCell, setHitCell] = useState(null);
+    const [theme, setTheme] = useState('theme-dark');
+    const [invertClicks, setInvertClicks] = useState(false);
+    const [questionMode, setQuestionMode] = useState(true);
+    const [best, setBest] = useState(loadBest);
+    const [newRecord, setNewRecord] = useState(false);
+    const timerRef = useRef(null);
+    const cfg = CONFIGS[diff];
+
+    useEffect(() => { document.body.className = theme; }, [theme]);
+
+    const initGame = useCallback((d=diff) => {
+      const c=CONFIGS[d];
+      clearInterval(timerRef.current);
+      setGrid(makeEmpty(c.rows,c.cols,0));
+      setRevealed(makeEmpty(c.rows,c.cols,false));
+      setMarks(makeEmpty(c.rows,c.cols,0));
+      setGameOver(false); setWon(false); setFirstClick(true);
+      setSeconds(0); setHitCell(null); setNewRecord(false);
+    }, [diff]);
+
+    useEffect(() => { initGame(diff); }, [diff]);
+
+    const startTimer = () => {
+      clearInterval(timerRef.current);
+      timerRef.current = setInterval(()=>setSeconds(s=>s+1), 1000);
+    };
+    const stopTimer = () => clearInterval(timerRef.current);
+
+    const doReveal = (r, c) => {
+      if (gameOver||won||revealed[r][c]||marks[r][c]===1) return;
+      let currentGrid = grid;
+      if (firstClick) {
+        currentGrid = placeMines(cfg.rows,cfg.cols,cfg.mines,r,c);
+        setGrid(currentGrid);
+        setFirstClick(false);
+        startTimer();
+      }
+      const newRevealed = revealed.map(row=>[...row]);
+      if (currentGrid[r][c]===-1) {
+        for(let rr=0;rr<cfg.rows;rr++)
+          for(let cc=0;cc<cfg.cols;cc++)
+            if(currentGrid[rr][cc]===-1) newRevealed[rr][cc]=true;
+        setRevealed(newRevealed);
+        setHitCell([r,c]); setGameOver(true); stopTimer();
+        return;
+      }
+      floodReveal(currentGrid, newRevealed, r, c, cfg.rows, cfg.cols);
+      setRevealed(newRevealed);
+      let hidden=0;
+      for(let rr=0;rr<cfg.rows;rr++)
+        for(let cc=0;cc<cfg.cols;cc++)
+          if(!newRevealed[rr][cc]) hidden++;
+      if (hidden===cfg.mines) {
+        setWon(true); stopTimer();
+        setSeconds(s => {
+          const nb={...best};
+          const isRecord = !nb[diff] || s < nb[diff];
+          if(isRecord){ nb[diff]=s; setBest(nb); saveBest(nb); setNewRecord(true); }
+          return s;
+        });
+      }
     };
 
-    function makeEmpty(rows, cols, val = false) {
-      return Array.from({ length: rows }, () => Array(cols).fill(val));
-    }
+    const doFlag = (r, c) => {
+      if (gameOver||won||revealed[r][c]) return;
+      const nm=marks.map(row=>[...row]);
+      nm[r][c] = questionMode ? (nm[r][c]+1)%3 : (nm[r][c]===1?0:1);
+      setMarks(nm);
+    };
 
-    function placeMines(rows, cols, totalMines, safeR, safeC) {
-      const grid = makeEmpty(rows, cols, 0);
-      let placed = 0;
-      while (placed < totalMines) {
-        const r = Math.floor(Math.random() * rows);
-        const c = Math.floor(Math.random() * cols);
-        if (grid[r][c] !== -1 && !(Math.abs(r - safeR) <= 1 && Math.abs(c - safeC) <= 1)) {
-          grid[r][c] = -1;
-          placed++;
-        }
-      }
-      for (let r = 0; r < rows; r++)
-        for (let c = 0; c < cols; c++)
-          if (grid[r][c] !== -1) {
-            let n = 0;
-            for (let dr = -1; dr <= 1; dr++)
-              for (let dc = -1; dc <= 1; dc++) {
-                const nr = r + dr, nc = c + dc;
-                if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && grid[nr][nc] === -1) n++;
-              }
-            grid[r][c] = n;
-          }
-      return grid;
-    }
+    const handleClick = (r,c) => { if(invertClicks) doFlag(r,c); else doReveal(r,c); };
+    const handleRight = (e,r,c) => { e.preventDefault(); if(invertClicks) doReveal(r,c); else doFlag(r,c); };
 
-    function floodReveal(grid, revealed, r, c, rows, cols) {
-      const stack = [[r, c]];
-      while (stack.length) {
-        const [cr, cc] = stack.pop();
-        if (cr < 0 || cr >= rows || cc < 0 || cc >= cols || revealed[cr][cc]) continue;
-        revealed[cr][cc] = true;
-        if (grid[cr][cc] === 0)
-          for (let dr = -1; dr <= 1; dr++)
-            for (let dc = -1; dc <= 1; dc++)
-              stack.push([cr + dr, cc + dc]);
-      }
-    }
+    const flagCount = marks ? marks.flat().filter(v=>v===1).length : 0;
+    const remaining = cfg.mines - flagCount;
+    const fmt = s => s>=60 ? `${Math.floor(s/60)}m${s%60}s` : `${s}s`;
 
-    function App() {
-      const [diff, setDiff] = useState('medium');
-      const [grid, setGrid] = useState(null);
-      const [revealed, setRevealed] = useState(null);
-      const [flagged, setFlagged] = useState(null);
-      const [gameOver, setGameOver] = useState(false);
-      const [won, setWon] = useState(false);
-      const [firstClick, setFirstClick] = useState(true);
-      const [seconds, setSeconds] = useState(0);
-      const [hitCell, setHitCell] = useState(null);
-      const timerRef = useRef(null);
-      const cfg = CONFIGS[diff];
+    return (
+      <div>
+        <div className="app-title">Démi<span>neur</span></div>
+        <div className="subtitle">// {invertClicks ? 'clic gauche = 🚩  |  clic droit = révéler' : 'clic gauche = révéler  |  clic droit = 🚩'}</div>
 
-      const initGame = useCallback((d = diff) => {
-        const c = CONFIGS[d];
-        clearInterval(timerRef.current);
-        setGrid(makeEmpty(c.rows, c.cols, 0));
-        setRevealed(makeEmpty(c.rows, c.cols, false));
-        setFlagged(makeEmpty(c.rows, c.cols, false));
-        setGameOver(false);
-        setWon(false);
-        setFirstClick(true);
-        setSeconds(0);
-        setHitCell(null);
-      }, [diff]);
-
-      useEffect(() => { initGame(diff); }, [diff]);
-
-      const startTimer = () => {
-        clearInterval(timerRef.current);
-        timerRef.current = setInterval(() => setSeconds(s => s + 1), 1000);
-      };
-
-      const stopTimer = () => clearInterval(timerRef.current);
-
-      const handleClick = (r, c) => {
-        if (gameOver || won || revealed[r][c] || flagged[r][c]) return;
-
-        let g = grid;
-        let isFirst = firstClick;
-
-        if (isFirst) {
-          g = placeMines(cfg.rows, cfg.cols, cfg.mines, r, c);
-          setGrid(g);
-          setFirstClick(false);
-          startTimer();
-        }
-
-        const newRevealed = revealed.map(row => [...row]);
-
-        if (g[r][c] === -1) {
-          // hit a mine
-          for (let rr = 0; rr < cfg.rows; rr++)
-            for (let cc = 0; cc < cfg.cols; cc++)
-              if (g[rr][cc] === -1) newRevealed[rr][cc] = true;
-          newRevealed[r][c] = true;
-          setRevealed(newRevealed);
-          setHitCell([r, c]);
-          setGameOver(true);
-          stopTimer();
-          return;
-        }
-
-        floodReveal(g, newRevealed, r, c, cfg.rows, cfg.cols);
-        setRevealed(newRevealed);
-
-        // check win
-        let hidden = 0;
-        for (let rr = 0; rr < cfg.rows; rr++)
-          for (let cc = 0; cc < cfg.cols; cc++)
-            if (!newRevealed[rr][cc]) hidden++;
-        if (hidden === cfg.mines) {
-          setWon(true);
-          stopTimer();
-        }
-      };
-
-      const handleRight = (e, r, c) => {
-        e.preventDefault();
-        if (gameOver || won || revealed[r][c]) return;
-        const nf = flagged.map(row => [...row]);
-        nf[r][c] = !nf[r][c];
-        setFlagged(nf);
-      };
-
-      const flagCount = flagged ? flagged.flat().filter(Boolean).length : 0;
-      const remaining = cfg.mines - flagCount;
-
-      return (
-        <div>
-          <div className="app-title">Démi<span>neur</span></div>
-          <div className="subtitle">// clic droit pour poser un drapeau</div>
-
-          <div className="top-bar">
-            <div className="stats">
-              <div className="stat">
-                <div className="stat-label">Mines</div>
-                <div className="stat-val">{remaining}</div>
-              </div>
-              <div className="stat">
-                <div className="stat-label">Drapeaux</div>
-                <div className="stat-val">{flagCount}</div>
-              </div>
-              <div className="stat">
-                <div className="stat-label">Temps</div>
-                <div className="stat-val">{seconds}s</div>
-              </div>
-            </div>
-            <div className="controls">
-              <select value={diff} onChange={e => setDiff(e.target.value)}>
-                {Object.entries(CONFIGS).map(([k, v]) => (
-                  <option key={k} value={k}>{v.label}</option>
-                ))}
-              </select>
-              <button onClick={() => initGame(diff)}>Nouvelle partie</button>
-            </div>
+        <div className="settings-row">
+          <span className="settings-label">Thème :</span>
+          {THEMES.map(t=>(
+            <button key={t.id} className={`theme-btn ${theme===t.id?'active':''}`} onClick={()=>setTheme(t.id)}>{t.label}</button>
+          ))}
+          <div className="toggle-group">
+            <span className="toggle-label">Inverser clics</span>
+            <button className={`toggle ${invertClicks?'on':''}`} onClick={()=>setInvertClicks(v=>!v)} aria-label="Inverser clics" />
+            <span className="toggle-label" style={{marginLeft:8}}>Mode ?</span>
+            <button className={`toggle ${questionMode?'on':''}`} onClick={()=>setQuestionMode(v=>!v)} aria-label="Mode question" />
           </div>
-
-          <div className="board-wrap">
-            <div className="board" style={{ gridTemplateColumns: `repeat(${cfg.cols}, 30px)` }}>
-              {grid && Array.from({ length: cfg.rows }, (_, r) =>
-                Array.from({ length: cfg.cols }, (_, c) => {
-                  const isRevealed = revealed[r][c];
-                  const isFlagged = flagged[r][c];
-                  const val = grid[r][c];
-                  const isHit = hitCell && hitCell[0] === r && hitCell[1] === c;
-
-                  let cls = 'cell';
-                  let content = '';
-
-                  if (isRevealed) {
-                    cls += ' revealed';
-                    if (val === -1) {
-                      cls += isHit ? ' mine-hit' : '';
-                      content = '💣';
-                    } else if (val > 0) {
-                      cls += ` n${val}`;
-                      content = val;
-                    }
-                  } else if (isFlagged) {
-                    cls += ' flagged';
-                    content = '🚩';
-                  }
-
-                  return (
-                    <div
-                      key={`${r}-${c}`}
-                      className={cls}
-                      onClick={() => handleClick(r, c)}
-                      onContextMenu={e => handleRight(e, r, c)}
-                    >
-                      {content}
-                    </div>
-                  );
-                })
-              )}
-            </div>
-          </div>
-
-          {won && (
-            <div className="banner win">🎉 Gagné en {seconds}s ! Bien joué.</div>
-          )}
-          {gameOver && !won && (
-            <div className="banner lose">💥 Boom ! Nouvelle partie ?</div>
-          )}
-          <div className="hint">clic gauche = révéler &nbsp;|&nbsp; clic droit = 🚩 drapeau</div>
         </div>
-      );
-    }
 
-    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
-  </script>
+        <div className="top-bar">
+          <div className="stats">
+            <div className="stat"><div className="stat-label">Mines</div><div className="stat-val">{remaining}</div></div>
+            <div className="stat"><div className="stat-label">Drapeaux</div><div className="stat-val">{flagCount}</div></div>
+            <div className="stat"><div className="stat-label">Temps</div><div className="stat-val">{fmt(seconds)}</div></div>
+          </div>
+          <div className="controls">
+            <select value={diff} onChange={e=>setDiff(e.target.value)}>
+              {Object.entries(CONFIGS).map(([k,v])=>(
+                <option key={k} value={k}>{v.label}</option>
+              ))}
+            </select>
+            <button onClick={()=>initGame(diff)}>Nouvelle partie</button>
+          </div>
+        </div>
+
+        <div className="board-wrap">
+          <div className="board" style={{gridTemplateColumns:`repeat(${cfg.cols},30px)`}}>
+            {grid && Array.from({length:cfg.rows},(_,r)=>
+              Array.from({length:cfg.cols},(_,c)=>{
+                const isRevealed=revealed[r][c];
+                const mark=marks[r][c];
+                const val=grid[r][c];
+                const isHit=hitCell&&hitCell[0]===r&&hitCell[1]===c;
+                let cls='cell', content='';
+                if(isRevealed){
+                  cls+=' revealed';
+                  if(val===-1){ cls+=isHit?' mine-hit':''; content='💣'; }
+                  else if(val>0){ cls+=` n${val}`; content=val; }
+                } else if(mark===1){ cls+=' flagged'; content='🚩'; }
+                else if(mark===2){ cls+=' questioned'; content='?'; }
+                return (
+                  <div key={`${r}-${c}`} className={cls}
+                    onClick={()=>handleClick(r,c)}
+                    onContextMenu={e=>handleRight(e,r,c)}>
+                    {content}
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+
+        {won && <div className="banner win">🎉 Gagné en {fmt(seconds)} !{newRecord ? ' 🏆 Nouveau record !' : ''}</div>}
+        {gameOver && !won && <div className="banner lose">💥 Boom ! Nouvelle partie ?</div>}
+
+        <div className="bottom-bar">
+          <div className="hint">
+            {questionMode && '🚩 → ? → vide (clic droit cycle)'}
+          </div>
+          <div className="best-times">
+            🏆 Records — Facile: <span>{best.easy?fmt(best.easy):'—'}</span>
+            &nbsp;| Moyen: <span>{best.medium?fmt(best.medium):'—'}</span>
+            &nbsp;| Difficile: <span>{best.hard?fmt(best.hard):'—'}</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
 </body>
 </html>
