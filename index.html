@@ -112,7 +112,8 @@
     .toggle::after { content:''; position:absolute; width:14px; height:14px; border-radius:50%; background:#fff; top:3px; left:3px; transition:left 0.2s; }
     .toggle.on::after { left:19px; }
 
-    .board-wrap { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px; overflow-x:auto; }
+    .board-wrap { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px; overflow-x:auto; scrollbar-width:none; }
+    .board-wrap::-webkit-scrollbar { display:none; }
     .board { display:inline-grid; gap:3px; }
 
     .cell { width:30px; height:30px; border-radius:4px; background:var(--cell-hidden); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; font-family:'Space Mono',monospace; cursor:pointer; user-select:none; transition:background 0.1s,transform 0.08s; }
@@ -196,7 +197,7 @@
     const [diff, setDiff] = useState('medium');
     const [grid, setGrid] = useState(null);
     const [revealed, setRevealed] = useState(null);
-    const [marks, setMarks] = useState(null);
+    const [marks, setMarks] = useState(null); // 0=hidden 1=flag 2=question
     const [gameOver, setGameOver] = useState(false);
     const [won, setWon] = useState(false);
     const [firstClick, setFirstClick] = useState(true);
@@ -208,6 +209,8 @@
     const [best, setBest] = useState(loadBest);
     const [newRecord, setNewRecord] = useState(false);
     const timerRef = useRef(null);
+    const gridRef = useRef(null);
+    const revealedRef = useRef(null);
     const cfg = CONFIGS[diff];
 
     useEffect(() => { document.body.className = theme; }, [theme]);
@@ -215,8 +218,10 @@
     const initGame = useCallback((d=diff) => {
       const c=CONFIGS[d];
       clearInterval(timerRef.current);
-      setGrid(makeEmpty(c.rows,c.cols,0));
-      setRevealed(makeEmpty(c.rows,c.cols,false));
+      const g=makeEmpty(c.rows,c.cols,0);
+      const rv=makeEmpty(c.rows,c.cols,false);
+      gridRef.current=g; revealedRef.current=rv;
+      setGrid(g); setRevealed(rv);
       setMarks(makeEmpty(c.rows,c.cols,0));
       setGameOver(false); setWon(false); setFirstClick(true);
       setSeconds(0); setHitCell(null); setNewRecord(false);
@@ -235,6 +240,7 @@
       let currentGrid = grid;
       if (firstClick) {
         currentGrid = placeMines(cfg.rows,cfg.cols,cfg.mines,r,c);
+        gridRef.current=currentGrid;
         setGrid(currentGrid);
         setFirstClick(false);
         startTimer();
@@ -267,12 +273,13 @@
 
     const doFlag = (r, c) => {
       if (gameOver||won||revealed[r][c]) return;
+      if (firstClick) { doReveal(r, c); return; }
       const nm=marks.map(row=>[...row]);
       nm[r][c] = questionMode ? (nm[r][c]+1)%3 : (nm[r][c]===1?0:1);
       setMarks(nm);
     };
 
-   const doChord = (r, c) => {
+    const doChord = (r, c) => {
       if (!revealed[r][c] || grid[r][c] <= 0) return;
       let adjFlags=0;
       for(let dr=-1;dr<=1;dr++) for(let dc=-1;dc<=1;dc++){
@@ -313,7 +320,7 @@
       }
     };
 
-const handleClick = (r,c) => {
+    const handleClick = (r,c) => {
       if(revealed[r][c]) doChord(r,c);
       else if(invertClicks) doFlag(r,c);
       else doReveal(r,c);
