@@ -112,8 +112,11 @@
     .toggle::after { content:''; position:absolute; width:14px; height:14px; border-radius:50%; background:#fff; top:3px; left:3px; transition:left 0.2s; }
     .toggle.on::after { left:19px; }
 
-    .board-wrap { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px; overflow-x:auto; scrollbar-width:none; }
-    .board-wrap::-webkit-scrollbar { display:none; }
+    .board-wrap { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px; overflow-x:auto; scrollbar-width:thin; scrollbar-color:var(--border) transparent; }
+    .board-wrap::-webkit-scrollbar { height:4px; }
+    .board-wrap::-webkit-scrollbar-track { background:transparent; }
+    .board-wrap::-webkit-scrollbar-thumb { background:var(--border); border-radius:4px; }
+    .board-wrap::-webkit-scrollbar-thumb:hover { background:var(--accent); }
     .board { display:inline-grid; gap:3px; }
 
     .cell { width:30px; height:30px; border-radius:4px; background:var(--cell-hidden); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; font-family:'Space Mono',monospace; cursor:pointer; user-select:none; transition:background 0.1s,transform 0.08s; }
