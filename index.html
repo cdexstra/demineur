@@ -151,6 +151,10 @@
     const [customRows, setCustomRows] = useState(()=>ls('dm_crows',9));
     const [customCols, setCustomCols] = useState(()=>ls('dm_ccols',9));
     const [customMines,setCustomMines]= useState(()=>ls('dm_cmines',10));
+    // Draft states for inputs only — applied on click Appliquer
+    const [draftRows, setDraftRows]   = useState(()=>ls('dm_crows',9));
+    const [draftCols, setDraftCols]   = useState(()=>ls('dm_ccols',9));
+    const [draftMines,setDraftMines]  = useState(()=>ls('dm_cmines',10));
     const [grid, setGrid]             = useState(null);
     const [revealed, setRevealed]     = useState(null);
     const [marks, setMarks]           = useState(null);
@@ -177,27 +181,25 @@
     useEffect(()=>lsSet('dm_cmines',customMines),[customMines]);
     useEffect(()=>{ document.body.className=theme; },[theme]);
 
-    const getCfg = useCallback((d=diff)=>{
+    const getCfg = useCallback((d=diff, cr=customRows, cc=customCols, cm=customMines)=>{
       if(d==='custom'){
-        const r=Math.max(2,Math.min(30,customRows));
-        const c=Math.max(2,Math.min(50,customCols));
-        const m=Math.max(1,Math.min(r*c-9,customMines));
+        const r=Math.max(2,Math.min(30,cr));
+        const c=Math.max(2,Math.min(50,cc));
+        const m=Math.max(1,Math.min(r*c-9,cm));
         return {rows:r,cols:c,mines:m};
       }
       return PRESET_CONFIGS[d];
     },[diff,customRows,customCols,customMines]);
 
-    const initGame = useCallback((d=diff)=>{
-      const c=getCfg(d);
+    const initGame = useCallback((d=diff, cr=customRows, cc=customCols, cm=customMines)=>{
+      const c=getCfg(d, cr, cc, cm);
       clearInterval(timerRef.current);
       setGrid(makeEmpty(c.rows,c.cols,0));
       setRevealed(makeEmpty(c.rows,c.cols,false));
       setMarks(makeEmpty(c.rows,c.cols,0));
       setGameOver(false); setWon(false); setFirstClick(true);
       setSeconds(0); setHitCell(null); setNewRecord(false);
-    },[diff,getCfg]);
-
-    useEffect(()=>{ initGame(diff); },[diff]);
+    },[diff,getCfg,customRows,customCols,customMines]);
 
     const startTimer=()=>{ clearInterval(timerRef.current); timerRef.current=setInterval(()=>setSeconds(s=>s+1),1000); };
     const stopTimer=()=>clearInterval(timerRef.current);
@@ -330,23 +332,29 @@
           <div className="custom-row">
             <span className="settings-label">Personnalisé :</span>
             <label>Lignes
-              <input type="number" min="2" max="30" value={customRows} onChange={e=>{
-                const v=Math.max(2,Math.min(30,+e.target.value||2));
-                setCustomRows(v); setCustomMines(m=>clampMines(v,customCols,m));
-              }} style={{marginLeft:6}} />
+              <input type="number" min="2" max="30" value={draftRows} onChange={e=>setDraftRows(+e.target.value||2)} style={{marginLeft:6}} />
             </label>
             <label>Colonnes
-              <input type="number" min="2" max="50" value={customCols} onChange={e=>{
-                const v=Math.max(2,Math.min(50,+e.target.value||2));
-                setCustomCols(v); setCustomMines(m=>clampMines(customRows,v,m));
-              }} style={{marginLeft:6}} />
+              <input type="number" min="2" max="50" value={draftCols} onChange={e=>setDraftCols(+e.target.value||2)} style={{marginLeft:6}} />
             </label>
             <label>Mines
-              <input type="number" min="1" max={customRows*customCols-9} value={customMines} onChange={e=>{
-                setCustomMines(clampMines(customRows,customCols,+e.target.value||1));
-              }} style={{marginLeft:6}} />
+              <input type="number" min="1" value={draftMines} onChange={e=>setDraftMines(+e.target.value||1)} style={{marginLeft:6}} />
             </label>
-            <button onClick={()=>initGame('custom')}>Appliquer</button>
+            <button onClick={()=>{
+              const r=Math.max(2,Math.min(30,draftRows||2));
+              const c=Math.max(2,Math.min(50,draftCols||2));
+              const m=Math.max(1,Math.min(r*c-9,draftMines||1));
+              setCustomRows(r); setCustomCols(c); setCustomMines(m);
+              setDraftRows(r); setDraftCols(c); setDraftMines(m);
+              lsSet('dm_crows',r); lsSet('dm_ccols',c); lsSet('dm_cmines',m);
+              // init with explicit values since state update is async
+              clearInterval(timerRef.current);
+              setGrid(makeEmpty(r,c,0));
+              setRevealed(makeEmpty(r,c,false));
+              setMarks(makeEmpty(r,c,0));
+              setGameOver(false); setWon(false); setFirstClick(true);
+              setSeconds(0); setHitCell(null); setNewRecord(false);
+            }}>Appliquer</button>
           </div>
         )}
 
@@ -358,7 +366,7 @@
             <div className="stat"><div className="stat-label">Temps</div><div className="stat-val">{fmt(seconds)}</div></div>
           </div>
           <div className="controls">
-            <select value={diff} onChange={e=>{setDiff(e.target.value);}}>
+            <select value={diff} onChange={e=>{ const d=e.target.value; setDiff(d); if(d!=='custom'){ const c=PRESET_CONFIGS[d]; clearInterval(timerRef.current); setGrid(makeEmpty(c.rows,c.cols,0)); setRevealed(makeEmpty(c.rows,c.cols,false)); setMarks(makeEmpty(c.rows,c.cols,0)); setGameOver(false); setWon(false); setFirstClick(true); setSeconds(0); setHitCell(null); setNewRecord(false); } }}>
               {Object.entries(PRESET_CONFIGS).map(([k,v])=>(
                 <option key={k} value={k}>{v.label}</option>
               ))}
