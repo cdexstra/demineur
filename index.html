@@ -10,83 +10,32 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; min-height:100vh; display:flex; align-items:flex-start; justify-content:center; padding:2rem 1rem; transition:background 0.3s,color 0.3s; }
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      min-height: 100vh;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 2rem 1rem;
-      transition: background 0.3s, color 0.3s;
-    }
+    body.theme-dark { --bg:#0f0f13;--surface:#1a1a22;--border:#2e2e3e;--accent:#7c6dfa;--accent2:#fa6d9a;--text:#e8e8f0;--text-muted:#8888a0;--cell-hidden:#252535;--cell-hover:#2e2e42;--cell-revealed:#181820;--cell-flag:#2a2040;--mine-hit:#4a1020;--mine-hit-border:#fa6d6d;--n1:#6db8fa;--n2:#6dfaa0;--n3:#fa6d6d;--n4:#a06dfa;--n5:#fa9a6d;--n6:#6dfaf0;--n7:#fa6de0;--n8:#a0a0b8;--bwin-bg:#0f2a1a;--bwin-b:#2a6d40;--bwin-t:#6dfaa0;--blose-bg:#2a0f18;--blose-b:#6d2a30;--blose-t:#fa8080; }
+    body.theme-light { --bg:#f0ede8;--surface:#ffffff;--border:#d0cdc8;--accent:#5c4de0;--accent2:#e0386a;--text:#1a1820;--text-muted:#706e80;--cell-hidden:#dedad4;--cell-hover:#ccc8c2;--cell-revealed:#ece9e4;--cell-flag:#ede0f0;--mine-hit:#ffd0d0;--mine-hit-border:#e04040;--n1:#1855b0;--n2:#1a7a40;--n3:#c02020;--n4:#5020a0;--n5:#a04010;--n6:#107070;--n7:#901060;--n8:#505060;--bwin-bg:#d8f0e0;--bwin-b:#40a060;--bwin-t:#1a6030;--blose-bg:#fde0e0;--blose-b:#e08080;--blose-t:#901010; }
+    body.theme-forest { --bg:#0d1a10;--surface:#162018;--border:#2a4030;--accent:#4caf70;--accent2:#ffd060;--text:#d8f0d8;--text-muted:#7aaa80;--cell-hidden:#1e3020;--cell-hover:#2a4028;--cell-revealed:#111a12;--cell-flag:#2a3a10;--mine-hit:#4a1010;--mine-hit-border:#ff6060;--n1:#80d0ff;--n2:#a0ff80;--n3:#ff8080;--n4:#c080ff;--n5:#ffb060;--n6:#60ffee;--n7:#ff80d0;--n8:#a0b0a0;--bwin-bg:#0d2a18;--bwin-b:#2a7040;--bwin-t:#80ffb0;--blose-bg:#2a0d10;--blose-b:#7a3030;--blose-t:#ff9090; }
+    body.theme-retro { --bg:#1a1000;--surface:#2a1e00;--border:#5a4010;--accent:#f0a000;--accent2:#f06000;--text:#ffe080;--text-muted:#a08040;--cell-hidden:#3a2a00;--cell-hover:#4a3800;--cell-revealed:#150e00;--cell-flag:#3a1800;--mine-hit:#5a0000;--mine-hit-border:#ff4000;--n1:#60d0ff;--n2:#60ff80;--n3:#ff6060;--n4:#d060ff;--n5:#ff9040;--n6:#60ffee;--n7:#ff60d0;--n8:#b0a060;--bwin-bg:#0a2000;--bwin-b:#406020;--bwin-t:#80ff40;--blose-bg:#3a0000;--blose-b:#802020;--blose-t:#ff8080; }
+    body.theme-ice { --bg:#e8f4ff;--surface:#ffffff;--border:#b8d8f0;--accent:#2080d0;--accent2:#8040e0;--text:#102040;--text-muted:#6090b0;--cell-hidden:#c8e4f8;--cell-hover:#b0d4f0;--cell-revealed:#ddeeff;--cell-flag:#d8c8f8;--mine-hit:#ffd0d8;--mine-hit-border:#e04060;--n1:#1060b0;--n2:#107040;--n3:#c02030;--n4:#6020b0;--n5:#b04010;--n6:#106080;--n7:#901070;--n8:#507090;--bwin-bg:#d0f0e0;--bwin-b:#40a070;--bwin-t:#106040;--blose-bg:#fde0e4;--blose-b:#e08090;--blose-t:#900030; }
 
-    body.theme-dark {
-      --bg:#0f0f13;--surface:#1a1a22;--border:#2e2e3e;
-      --accent:#7c6dfa;--accent2:#fa6d9a;
-      --text:#e8e8f0;--text-muted:#8888a0;
-      --cell-hidden:#252535;--cell-hover:#2e2e42;
-      --cell-revealed:#181820;--cell-flag:#2a2040;
-      --mine-hit:#4a1020;--mine-hit-border:#fa6d6d;
-      --n1:#6db8fa;--n2:#6dfaa0;--n3:#fa6d6d;--n4:#a06dfa;--n5:#fa9a6d;--n6:#6dfaf0;--n7:#fa6de0;--n8:#a0a0b8;
-      --bwin-bg:#0f2a1a;--bwin-b:#2a6d40;--bwin-t:#6dfaa0;
-      --blose-bg:#2a0f18;--blose-b:#6d2a30;--blose-t:#fa8080;
-    }
-    body.theme-light {
-      --bg:#f0ede8;--surface:#ffffff;--border:#d0cdc8;
-      --accent:#5c4de0;--accent2:#e0386a;
-      --text:#1a1820;--text-muted:#706e80;
-      --cell-hidden:#dedad4;--cell-hover:#ccc8c2;
-      --cell-revealed:#ece9e4;--cell-flag:#ede0f0;
-      --mine-hit:#ffd0d0;--mine-hit-border:#e04040;
-      --n1:#1855b0;--n2:#1a7a40;--n3:#c02020;--n4:#5020a0;--n5:#a04010;--n6:#107070;--n7:#901060;--n8:#505060;
-      --bwin-bg:#d8f0e0;--bwin-b:#40a060;--bwin-t:#1a6030;
-      --blose-bg:#fde0e0;--blose-b:#e08080;--blose-t:#901010;
-    }
-    body.theme-forest {
-      --bg:#0d1a10;--surface:#162018;--border:#2a4030;
-      --accent:#4caf70;--accent2:#ffd060;
-      --text:#d8f0d8;--text-muted:#7aaa80;
-      --cell-hidden:#1e3020;--cell-hover:#2a4028;
-      --cell-revealed:#111a12;--cell-flag:#2a3a10;
-      --mine-hit:#4a1010;--mine-hit-border:#ff6060;
-      --n1:#80d0ff;--n2:#a0ff80;--n3:#ff8080;--n4:#c080ff;--n5:#ffb060;--n6:#60ffee;--n7:#ff80d0;--n8:#a0b0a0;
-      --bwin-bg:#0d2a18;--bwin-b:#2a7040;--bwin-t:#80ffb0;
-      --blose-bg:#2a0d10;--blose-b:#7a3030;--blose-t:#ff9090;
-    }
-    body.theme-retro {
-      --bg:#1a1000;--surface:#2a1e00;--border:#5a4010;
-      --accent:#f0a000;--accent2:#f06000;
-      --text:#ffe080;--text-muted:#a08040;
-      --cell-hidden:#3a2a00;--cell-hover:#4a3800;
-      --cell-revealed:#150e00;--cell-flag:#3a1800;
-      --mine-hit:#5a0000;--mine-hit-border:#ff4000;
-      --n1:#60d0ff;--n2:#60ff80;--n3:#ff6060;--n4:#d060ff;--n5:#ff9040;--n6:#60ffee;--n7:#ff60d0;--n8:#b0a060;
-      --bwin-bg:#0a2000;--bwin-b:#406020;--bwin-t:#80ff40;
-      --blose-bg:#3a0000;--blose-b:#802020;--blose-t:#ff8080;
-    }
-    body.theme-ice {
-      --bg:#e8f4ff;--surface:#ffffff;--border:#b8d8f0;
-      --accent:#2080d0;--accent2:#8040e0;
-      --text:#102040;--text-muted:#6090b0;
-      --cell-hidden:#c8e4f8;--cell-hover:#b0d4f0;
-      --cell-revealed:#ddeeff;--cell-flag:#d8c8f8;
-      --mine-hit:#ffd0d8;--mine-hit-border:#e04060;
-      --n1:#1060b0;--n2:#107040;--n3:#c02030;--n4:#6020b0;--n5:#b04010;--n6:#106080;--n7:#901070;--n8:#507090;
-      --bwin-bg:#d0f0e0;--bwin-b:#40a070;--bwin-t:#106040;
-      --blose-bg:#fde0e4;--blose-b:#e08090;--blose-t:#900030;
-    }
-
-    #root { width: 100%; max-width: 960px; }
-
+    #root { width:100%; max-width:960px; }
     .app-title { font-family:'Space Mono',monospace; font-size:28px; font-weight:700; letter-spacing:-1px; color:var(--text); margin-bottom:4px; }
     .app-title span { color:var(--accent); }
     .subtitle { font-size:13px; color:var(--text-muted); margin-bottom:1.25rem; font-family:'Space Mono',monospace; }
 
+    .settings-row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:1rem; padding:10px 14px; background:var(--surface); border:1px solid var(--border); border-radius:8px; }
+    .settings-label { font-size:12px; color:var(--text-muted); font-family:'Space Mono',monospace; margin-right:2px; white-space:nowrap; }
+    .theme-btn { padding:5px 12px; font-size:12px; border-radius:20px; border:1px solid var(--border); background:var(--cell-hidden); color:var(--text); cursor:pointer; font-family:'Inter',sans-serif; transition:all 0.15s; }
+    .theme-btn.active { border-color:var(--accent); color:var(--accent); background:var(--cell-flag); }
+    .toggle-group { display:flex; align-items:center; gap:6px; margin-left:auto; flex-wrap:wrap; }
+    .toggle-label { font-size:12px; color:var(--text-muted); font-family:'Space Mono',monospace; white-space:nowrap; }
+    .toggle { width:36px; height:20px; border-radius:10px; background:var(--border); position:relative; cursor:pointer; border:none; transition:background 0.2s; flex-shrink:0; padding:0; }
+    .toggle.on { background:var(--accent); }
+    .toggle::after { content:''; position:absolute; width:14px; height:14px; border-radius:50%; background:#fff; top:3px; left:3px; transition:left 0.2s; }
+    .toggle.on::after { left:19px; }
+
     .top-bar { display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; flex-wrap:wrap; gap:10px; }
-    .stats { display:flex; gap:8px; }
+    .stats { display:flex; gap:8px; flex-wrap:wrap; }
     .stat { background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:8px 14px; text-align:center; min-width:68px; }
     .stat-label { font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; font-family:'Space Mono',monospace; margin-bottom:2px; }
     .stat-val { font-size:20px; font-weight:700; font-family:'Space Mono',monospace; color:var(--accent); }
@@ -94,23 +43,15 @@
 
     select { background:var(--surface); border:1px solid var(--border); border-radius:6px; color:var(--text); font-size:13px; padding:7px 10px; font-family:'Inter',sans-serif; cursor:pointer; outline:none; }
     select:focus { border-color:var(--accent); }
-
     button { background:var(--accent); border:none; border-radius:6px; color:#fff; font-size:13px; font-weight:600; padding:7px 14px; cursor:pointer; font-family:'Inter',sans-serif; transition:opacity 0.15s; }
     button:hover { opacity:0.85; }
     button:active { opacity:0.7; }
 
-    .settings-row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:1rem; padding:10px 14px; background:var(--surface); border:1px solid var(--border); border-radius:8px; }
-    .settings-label { font-size:12px; color:var(--text-muted); font-family:'Space Mono',monospace; margin-right:2px; white-space:nowrap; }
-
-    .theme-btn { padding:5px 12px; font-size:12px; border-radius:20px; border:1px solid var(--border); background:var(--cell-hidden); color:var(--text); cursor:pointer; font-family:'Inter',sans-serif; transition:all 0.15s; }
-    .theme-btn.active { border-color:var(--accent); color:var(--accent); background:var(--cell-flag); }
-
-    .toggle-group { display:flex; align-items:center; gap:6px; margin-left:auto; flex-wrap:wrap; }
-    .toggle-label { font-size:12px; color:var(--text-muted); font-family:'Space Mono',monospace; white-space:nowrap; }
-    .toggle { width:36px; height:20px; border-radius:10px; background:var(--border); position:relative; cursor:pointer; border:none; transition:background 0.2s; flex-shrink:0; padding:0; }
-    .toggle.on { background:var(--accent); }
-    .toggle::after { content:''; position:absolute; width:14px; height:14px; border-radius:50%; background:#fff; top:3px; left:3px; transition:left 0.2s; }
-    .toggle.on::after { left:19px; }
+    /* Custom mode panel */
+    .custom-row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:1rem; padding:10px 14px; background:var(--surface); border:1px solid var(--border); border-radius:8px; }
+    .custom-row label { font-size:12px; color:var(--text-muted); font-family:'Space Mono',monospace; }
+    .custom-row input[type=number] { width:64px; background:var(--cell-hidden); border:1px solid var(--border); border-radius:6px; color:var(--text); font-size:13px; padding:5px 8px; font-family:'Space Mono',monospace; outline:none; }
+    .custom-row input[type=number]:focus { border-color:var(--accent); }
 
     .board-wrap { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px; overflow-x:auto; scrollbar-width:thin; scrollbar-color:var(--border) transparent; }
     .board-wrap::-webkit-scrollbar { height:4px; }
@@ -133,8 +74,16 @@
 
     .bottom-bar { display:flex; justify-content:space-between; align-items:flex-start; margin-top:10px; gap:12px; flex-wrap:wrap; }
     .hint { font-size:12px; color:var(--text-muted); font-family:'Space Mono',monospace; line-height:1.8; }
-    .best-times { font-size:12px; color:var(--text-muted); font-family:'Space Mono',monospace; text-align:right; line-height:1.8; }
-    .best-times span { color:var(--accent); font-weight:700; }
+
+    .records-block { font-size:12px; color:var(--text-muted); font-family:'Space Mono',monospace; line-height:1.9; }
+    .records-block span { color:var(--accent); font-weight:700; }
+
+    .stats-block { margin-top:1rem; padding:10px 14px; background:var(--surface); border:1px solid var(--border); border-radius:8px; display:flex; gap:24px; flex-wrap:wrap; align-items:center; }
+    .stats-block-title { font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; font-family:'Space Mono',monospace; margin-right:8px; }
+    .stats-block-item { font-size:13px; font-family:'Space Mono',monospace; color:var(--text-muted); }
+    .stats-block-item span { color:var(--accent); font-weight:700; }
+    .stats-block-item.good span { color:var(--bwin-t); }
+    .stats-block-item.bad span { color:var(--blose-t); }
   </style>
 </head>
 <body class="theme-dark">
@@ -143,10 +92,11 @@
 <script type="text/babel">
   const { useState, useEffect, useRef, useCallback } = React;
 
-  const CONFIGS = {
+  const PRESET_CONFIGS = {
     easy:   { rows:9,  cols:9,  mines:10, label:'Facile (9×9)' },
     medium: { rows:16, cols:16, mines:40, label:'Moyen (16×16)' },
     hard:   { rows:16, cols:30, mines:99, label:'Difficile (30×16)' },
+    custom: { rows:9,  cols:9,  mines:10, label:'Personnalisé' },
   };
 
   const THEMES = [
@@ -156,6 +106,9 @@
     { id:'theme-retro',  label:'🕹️ Retro' },
     { id:'theme-ice',    label:'🧊 Ice' },
   ];
+
+  function ls(key, def) { try { const v=localStorage.getItem(key); return v!==null?JSON.parse(v):def; } catch { return def; } }
+  function lsSet(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch {} }
 
   function makeEmpty(rows, cols, val=false) {
     return Array.from({length:rows}, ()=>Array(cols).fill(val));
@@ -193,111 +146,139 @@
     }
   }
 
-  function loadBest() { try { return JSON.parse(localStorage.getItem('dm_best')||'{}'); } catch { return {}; } }
-  function saveBest(b) { try { localStorage.setItem('dm_best', JSON.stringify(b)); } catch {} }
-
   function App() {
-    const [diff, setDiff] = useState('medium');
-    const [grid, setGrid] = useState(null);
-    const [revealed, setRevealed] = useState(null);
-    const [marks, setMarks] = useState(null); // 0=hidden 1=flag 2=question
-    const [gameOver, setGameOver] = useState(false);
-    const [won, setWon] = useState(false);
+    const [diff, setDiff]             = useState(()=>ls('dm_diff','medium'));
+    const [customRows, setCustomRows] = useState(()=>ls('dm_crows',9));
+    const [customCols, setCustomCols] = useState(()=>ls('dm_ccols',9));
+    const [customMines,setCustomMines]= useState(()=>ls('dm_cmines',10));
+    const [grid, setGrid]             = useState(null);
+    const [revealed, setRevealed]     = useState(null);
+    const [marks, setMarks]           = useState(null);
+    const [gameOver, setGameOver]     = useState(false);
+    const [won, setWon]               = useState(false);
     const [firstClick, setFirstClick] = useState(true);
-    const [seconds, setSeconds] = useState(0);
-    const [hitCell, setHitCell] = useState(null);
-    const [theme, setTheme] = useState('theme-dark');
-    const [invertClicks, setInvertClicks] = useState(false);
-    const [questionMode, setQuestionMode] = useState(true);
-    const [best, setBest] = useState(loadBest);
-    const [newRecord, setNewRecord] = useState(false);
+    const [seconds, setSeconds]       = useState(0);
+    const [hitCell, setHitCell]       = useState(null);
+    const [theme, setTheme]           = useState(()=>ls('dm_theme','theme-dark'));
+    const [invertClicks, setInvertClicks] = useState(()=>ls('dm_invert',false));
+    const [questionMode, setQuestionMode] = useState(()=>ls('dm_qmode',true));
+    const [best, setBest]             = useState(()=>ls('dm_best',{}));
+    const [gameStats, setGameStats]   = useState(()=>ls('dm_stats',{easy:{w:0,l:0},medium:{w:0,l:0},hard:{w:0,l:0},custom:{w:0,l:0}}));
+    const [newRecord, setNewRecord]   = useState(false);
     const timerRef = useRef(null);
-    const gridRef = useRef(null);
-    const revealedRef = useRef(null);
-    const cfg = CONFIGS[diff];
 
-    useEffect(() => { document.body.className = theme; }, [theme]);
+    // Persist settings
+    useEffect(()=>lsSet('dm_diff',diff),[diff]);
+    useEffect(()=>lsSet('dm_theme',theme),[theme]);
+    useEffect(()=>lsSet('dm_invert',invertClicks),[invertClicks]);
+    useEffect(()=>lsSet('dm_qmode',questionMode),[questionMode]);
+    useEffect(()=>lsSet('dm_crows',customRows),[customRows]);
+    useEffect(()=>lsSet('dm_ccols',customCols),[customCols]);
+    useEffect(()=>lsSet('dm_cmines',customMines),[customMines]);
+    useEffect(()=>{ document.body.className=theme; },[theme]);
 
-    const initGame = useCallback((d=diff) => {
-      const c=CONFIGS[d];
+    const getCfg = useCallback((d=diff)=>{
+      if(d==='custom'){
+        const r=Math.max(2,Math.min(30,customRows));
+        const c=Math.max(2,Math.min(50,customCols));
+        const m=Math.max(1,Math.min(r*c-9,customMines));
+        return {rows:r,cols:c,mines:m};
+      }
+      return PRESET_CONFIGS[d];
+    },[diff,customRows,customCols,customMines]);
+
+    const initGame = useCallback((d=diff)=>{
+      const c=getCfg(d);
       clearInterval(timerRef.current);
-      const g=makeEmpty(c.rows,c.cols,0);
-      const rv=makeEmpty(c.rows,c.cols,false);
-      gridRef.current=g; revealedRef.current=rv;
-      setGrid(g); setRevealed(rv);
+      setGrid(makeEmpty(c.rows,c.cols,0));
+      setRevealed(makeEmpty(c.rows,c.cols,false));
       setMarks(makeEmpty(c.rows,c.cols,0));
       setGameOver(false); setWon(false); setFirstClick(true);
       setSeconds(0); setHitCell(null); setNewRecord(false);
-    }, [diff]);
+    },[diff,getCfg]);
 
-    useEffect(() => { initGame(diff); }, [diff]);
+    useEffect(()=>{ initGame(diff); },[diff]);
 
-    const startTimer = () => {
-      clearInterval(timerRef.current);
-      timerRef.current = setInterval(()=>setSeconds(s=>s+1), 1000);
+    const startTimer=()=>{ clearInterval(timerRef.current); timerRef.current=setInterval(()=>setSeconds(s=>s+1),1000); };
+    const stopTimer=()=>clearInterval(timerRef.current);
+
+    const cfg = getCfg();
+
+    const recordWin=(s)=>{
+      // best time
+      const nb={...best};
+      const isRecord=!nb[diff]||s<nb[diff];
+      if(isRecord){ nb[diff]=s; setBest(nb); lsSet('dm_best',nb); setNewRecord(true); }
+      // stats
+      const ns={...gameStats};
+      if(!ns[diff]) ns[diff]={w:0,l:0};
+      ns[diff]={...ns[diff],w:ns[diff].w+1};
+      setGameStats(ns); lsSet('dm_stats',ns);
     };
-    const stopTimer = () => clearInterval(timerRef.current);
 
-    const doReveal = (r, c) => {
-      if (gameOver||won||revealed[r][c]||marks[r][c]===1) return;
-      let currentGrid = grid;
-      if (firstClick) {
-        currentGrid = placeMines(cfg.rows,cfg.cols,cfg.mines,r,c);
-        gridRef.current=currentGrid;
-        setGrid(currentGrid);
-        setFirstClick(false);
-        startTimer();
-      }
-      const newRevealed = revealed.map(row=>[...row]);
-      if (currentGrid[r][c]===-1) {
-        for(let rr=0;rr<cfg.rows;rr++)
-          for(let cc=0;cc<cfg.cols;cc++)
-            if(currentGrid[rr][cc]===-1) newRevealed[rr][cc]=true;
-        setRevealed(newRevealed);
-        setHitCell([r,c]); setGameOver(true); stopTimer();
-        return;
-      }
-      floodReveal(currentGrid, newRevealed, r, c, cfg.rows, cfg.cols);
-      setRevealed(newRevealed);
+    const recordLoss=()=>{
+      const ns={...gameStats};
+      if(!ns[diff]) ns[diff]={w:0,l:0};
+      ns[diff]={...ns[diff],l:ns[diff].l+1};
+      setGameStats(ns); lsSet('dm_stats',ns);
+    };
+
+    const checkWin=(newRevealed,currentGrid)=>{
       let hidden=0;
       for(let rr=0;rr<cfg.rows;rr++)
         for(let cc=0;cc<cfg.cols;cc++)
           if(!newRevealed[rr][cc]) hidden++;
-      if (hidden===cfg.mines) {
+      if(hidden===cfg.mines){
         setWon(true); stopTimer();
-        setSeconds(s => {
-          const nb={...best};
-          const isRecord = !nb[diff] || s < nb[diff];
-          if(isRecord){ nb[diff]=s; setBest(nb); saveBest(nb); setNewRecord(true); }
-          return s;
-        });
+        setSeconds(s=>{ recordWin(s); return s; });
       }
     };
 
-    const doFlag = (r, c) => {
-      if (gameOver||won||revealed[r][c]) return;
-      if (firstClick) { doReveal(r, c); return; }
+    const doReveal=(r,c)=>{
+      if(gameOver||won||revealed[r][c]||marks[r][c]===1) return;
+      let currentGrid=grid;
+      if(firstClick){
+        currentGrid=placeMines(cfg.rows,cfg.cols,cfg.mines,r,c);
+        setGrid(currentGrid); setFirstClick(false); startTimer();
+      }
+      const newRevealed=revealed.map(row=>[...row]);
+      if(currentGrid[r][c]===-1){
+        for(let rr=0;rr<cfg.rows;rr++)
+          for(let cc=0;cc<cfg.cols;cc++)
+            if(currentGrid[rr][cc]===-1) newRevealed[rr][cc]=true;
+        setRevealed(newRevealed); setHitCell([r,c]); setGameOver(true); stopTimer();
+        recordLoss();
+        return;
+      }
+      floodReveal(currentGrid,newRevealed,r,c,cfg.rows,cfg.cols);
+      setRevealed(newRevealed);
+      checkWin(newRevealed,currentGrid);
+    };
+
+    const doFlag=(r,c)=>{
+      if(gameOver||won||revealed[r][c]) return;
+      if(firstClick){ doReveal(r,c); return; }
       const nm=marks.map(row=>[...row]);
-      nm[r][c] = questionMode ? (nm[r][c]+1)%3 : (nm[r][c]===1?0:1);
+      nm[r][c]=questionMode?(nm[r][c]+1)%3:(nm[r][c]===1?0:1);
       setMarks(nm);
     };
 
-    const doChord = (r, c) => {
-      if (!revealed[r][c] || grid[r][c] <= 0) return;
+    const doChord=(r,c)=>{
+      if(!revealed[r][c]||grid[r][c]<=0) return;
       let adjFlags=0;
       for(let dr=-1;dr<=1;dr++) for(let dc=-1;dc<=1;dc++){
         const nr=r+dr,nc=c+dc;
         if(nr>=0&&nr<cfg.rows&&nc>=0&&nc<cfg.cols&&marks[nr][nc]===1) adjFlags++;
       }
-      if (adjFlags !== grid[r][c]) return;
-      const newRevealed = revealed.map(row=>[...row]);
-      let hitMine=false, hitR, hitC;
+      if(adjFlags!==grid[r][c]) return;
+      const newRevealed=revealed.map(row=>[...row]);
+      let hitMine=false,hitR,hitC;
       for(let dr=-1;dr<=1;dr++) for(let dc=-1;dc<=1;dc++){
         const nr=r+dr,nc=c+dc;
         if(nr<0||nr>=cfg.rows||nc<0||nc>=cfg.cols) continue;
         if(!newRevealed[nr][nc]&&marks[nr][nc]!==1){
           if(grid[nr][nc]===-1){ hitMine=true; hitR=nr; hitC=nc; newRevealed[nr][nc]=true; }
-          else floodReveal(grid, newRevealed, nr, nc, cfg.rows, cfg.cols);
+          else floodReveal(grid,newRevealed,nr,nc,cfg.rows,cfg.cols);
         }
       }
       if(hitMine){
@@ -305,45 +286,32 @@
           for(let cc=0;cc<cfg.cols;cc++)
             if(grid[rr][cc]===-1) newRevealed[rr][cc]=true;
         setRevealed(newRevealed); setHitCell([hitR,hitC]); setGameOver(true); stopTimer();
+        recordLoss();
         return;
       }
       setRevealed(newRevealed);
-      let hidden=0;
-      for(let rr=0;rr<cfg.rows;rr++)
-        for(let cc=0;cc<cfg.cols;cc++)
-          if(!newRevealed[rr][cc]) hidden++;
-      if(hidden===cfg.mines){
-        setWon(true); stopTimer();
-        setSeconds(s=>{
-          const nb={...best};
-          const isRecord=!nb[diff]||s<nb[diff];
-          if(isRecord){nb[diff]=s;setBest(nb);saveBest(nb);setNewRecord(true);}
-          return s;
-        });
-      }
+      checkWin(newRevealed,grid);
     };
 
-    const handleClick = (r,c) => {
-      if(revealed[r][c]) doChord(r,c);
-      else if(invertClicks) doFlag(r,c);
-      else doReveal(r,c);
-    };
-    const handleRight = (e,r,c) => {
-      e.preventDefault();
-      if(revealed[r][c]) doChord(r,c);
-      else if(invertClicks) doReveal(r,c);
-      else doFlag(r,c);
-    };
+    const handleClick=(r,c)=>{ if(revealed[r][c]) doChord(r,c); else if(invertClicks) doFlag(r,c); else doReveal(r,c); };
+    const handleRight=(e,r,c)=>{ e.preventDefault(); if(revealed[r][c]) doChord(r,c); else if(invertClicks) doReveal(r,c); else doFlag(r,c); };
 
-    const flagCount = marks ? marks.flat().filter(v=>v===1).length : 0;
-    const remaining = cfg.mines - flagCount;
-    const fmt = s => s>=60 ? `${Math.floor(s/60)}m${s%60}s` : `${s}s`;
+    const flagCount=marks?marks.flat().filter(v=>v===1).length:0;
+    const remaining=cfg.mines-flagCount;
+    const fmt=s=>s>=60?`${Math.floor(s/60)}m${s%60}s`:`${s}s`;
+
+    const st=gameStats[diff]||{w:0,l:0};
+    const total=st.w+st.l;
+    const winRate=total>0?Math.round((st.w/total)*100):null;
+
+    const clampMines=(r,c,m)=>Math.max(1,Math.min(r*c-9,m));
 
     return (
       <div>
         <div className="app-title">Démi<span>neur</span></div>
-        <div className="subtitle">// {invertClicks ? 'clic gauche = 🚩  |  clic droit = révéler' : 'clic gauche = révéler  |  clic droit = 🚩'}</div>
+        <div className="subtitle">// {invertClicks?'clic gauche = 🚩  |  clic droit = révéler':'clic gauche = révéler  |  clic droit = 🚩'}</div>
 
+        {/* Themes + toggles */}
         <div className="settings-row">
           <span className="settings-label">Thème :</span>
           {THEMES.map(t=>(
@@ -357,6 +325,32 @@
           </div>
         </div>
 
+        {/* Custom mode panel */}
+        {diff==='custom' && (
+          <div className="custom-row">
+            <span className="settings-label">Personnalisé :</span>
+            <label>Lignes
+              <input type="number" min="2" max="30" value={customRows} onChange={e=>{
+                const v=Math.max(2,Math.min(30,+e.target.value||2));
+                setCustomRows(v); setCustomMines(m=>clampMines(v,customCols,m));
+              }} style={{marginLeft:6}} />
+            </label>
+            <label>Colonnes
+              <input type="number" min="2" max="50" value={customCols} onChange={e=>{
+                const v=Math.max(2,Math.min(50,+e.target.value||2));
+                setCustomCols(v); setCustomMines(m=>clampMines(customRows,v,m));
+              }} style={{marginLeft:6}} />
+            </label>
+            <label>Mines
+              <input type="number" min="1" max={customRows*customCols-9} value={customMines} onChange={e=>{
+                setCustomMines(clampMines(customRows,customCols,+e.target.value||1));
+              }} style={{marginLeft:6}} />
+            </label>
+            <button onClick={()=>initGame('custom')}>Appliquer</button>
+          </div>
+        )}
+
+        {/* Top bar */}
         <div className="top-bar">
           <div className="stats">
             <div className="stat"><div className="stat-label">Mines</div><div className="stat-val">{remaining}</div></div>
@@ -364,8 +358,8 @@
             <div className="stat"><div className="stat-label">Temps</div><div className="stat-val">{fmt(seconds)}</div></div>
           </div>
           <div className="controls">
-            <select value={diff} onChange={e=>setDiff(e.target.value)}>
-              {Object.entries(CONFIGS).map(([k,v])=>(
+            <select value={diff} onChange={e=>{setDiff(e.target.value);}}>
+              {Object.entries(PRESET_CONFIGS).map(([k,v])=>(
                 <option key={k} value={k}>{v.label}</option>
               ))}
             </select>
@@ -373,6 +367,7 @@
           </div>
         </div>
 
+        {/* Board */}
         <div className="board-wrap">
           <div className="board" style={{gridTemplateColumns:`repeat(${cfg.cols},30px)`}}>
             {grid && Array.from({length:cfg.rows},(_,r)=>
@@ -381,7 +376,7 @@
                 const mark=marks[r][c];
                 const val=grid[r][c];
                 const isHit=hitCell&&hitCell[0]===r&&hitCell[1]===c;
-                let cls='cell', content='';
+                let cls='cell',content='';
                 if(isRevealed){
                   cls+=' revealed';
                   if(val===-1){ cls+=isHit?' mine-hit':''; content='💣'; }
@@ -400,14 +395,22 @@
           </div>
         </div>
 
-        {won && <div className="banner win">🎉 Gagné en {fmt(seconds)} !{newRecord ? ' 🏆 Nouveau record !' : ''}</div>}
-        {gameOver && !won && <div className="banner lose">💥 Boom ! Nouvelle partie ?</div>}
+        {won && <div className="banner win">🎉 Gagné en {fmt(seconds)} !{newRecord?' 🏆 Nouveau record !':''}</div>}
+        {gameOver&&!won && <div className="banner lose">💥 Boom ! Nouvelle partie ?</div>}
 
+        {/* Stats block */}
+        <div className="stats-block">
+          <span className="stats-block-title">Stats ({PRESET_CONFIGS[diff]?.label||'Perso'})</span>
+          <span className="stats-block-item good">Victoires : <span>{st.w}</span></span>
+          <span className="stats-block-item bad">Défaites : <span>{st.l}</span></span>
+          <span className="stats-block-item">Parties : <span>{total}</span></span>
+          <span className="stats-block-item">Taux de victoire : <span>{winRate!==null?winRate+'%':'—'}</span></span>
+        </div>
+
+        {/* Bottom */}
         <div className="bottom-bar">
-          <div className="hint">
-            {questionMode && '🚩 → ? → vide (clic droit cycle)'}
-          </div>
-          <div className="best-times">
+          <div className="hint">{questionMode&&'🚩 → ? → vide (clic droit cycle)'}</div>
+          <div className="records-block">
             🏆 Records — Facile: <span>{best.easy?fmt(best.easy):'—'}</span>
             &nbsp;| Moyen: <span>{best.medium?fmt(best.medium):'—'}</span>
             &nbsp;| Difficile: <span>{best.hard?fmt(best.hard):'—'}</span>
